@@ -12,33 +12,39 @@ def create_table(table_name, item):
         print("Done!")
 
 def drop_table(table_name):
-    with sqlite3.connect(db_name) as con:
-        cur = con.cursor()
-        command = f"DROP TABLE IF EXISTS {table_name};"
-        time.sleep(0.5)
-        print("Deleting...")
-        cur.execute(command)
-        time.sleep(1)
-        print("Done!")
+        with sqlite3.connect(db_name) as con:
+            cur = con.cursor()
+            command = f"DROP TABLE IF EXISTS {table_name};"
+            time.sleep(0.5)
+            print("Deleting...")
+            cur.execute(command)
+            time.sleep(1)
+            print("Done!")
 
 def insert_to_table(table_name, item):
-    with sqlite3.connect(db_name) as con:
-        cur = con.cursor()
-        command = f"INSERT INTO {table_name} VALUES ('{item}');"
-        time.sleep(0.5)
-        print('Inserting...')
-        time.sleep(1)
-        cur.execute(command)
-        print("Done!")
+    try:
+        with sqlite3.connect(db_name) as con:
+            cur = con.cursor()
+            command = f"INSERT INTO {table_name} VALUES ('{item}');"
+            time.sleep(0.5)
+            print('Inserting...')
+            time.sleep(1)
+            cur.execute(command)
+            print("Done!")
+    except sqlite3.OperationalError as e:
+        print("No Table Name Like That!")
 
 def select_show_all(table_name):
-    with sqlite3.connect(db_name) as con:
-        cur = con.cursor()
-        command = f"SELECT * FROM {table_name};"
-        cur.execute(command)
-        records = cur.fetchall()
-        for i in records:
-            print(i[0])
+    try:
+        with sqlite3.connect(db_name) as con:
+            cur = con.cursor()
+            command = f"SELECT * FROM {table_name};"
+            cur.execute(command)
+            records = cur.fetchall()
+            for i in records:
+                print(i[0])
+    except sqlite3.OperationalError as e:
+        print("No Table Name Such like That!")
 
 # ---------------------------------------------
 db_name = input("Enter DB name to start (type it with .db format): ")
@@ -59,5 +65,6 @@ def start_app(answer):
             select_show_all(input("Enter your Table name to show: "))
         answer = input("Enter Option: ")
     print("Done!")
+    print("Tnx For Using Us!")
 
 start_app(input("Choose Ur option: "))
